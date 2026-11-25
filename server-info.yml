@@ -1,0 +1,24 @@
+- name: Server Information
+  hosts: linux_servers
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Show server details
+      debug:
+        msg:
+          - "Hostname: {{ ansible_hostname }}"
+          - "OS: {{ ansible_distribution }} {{ ansible_distribution_version }}"
+          - "Kernel: {{ ansible_kernel }}"
+          - "Architecture: {{ ansible_architecture }}"
+          - "CPU Cores: {{ ansible_processor_vcpus }}"
+          - "RAM: {{ ansible_memtotal_mb }} MB"
+          - "IP: {{ ansible_default_ipv4.address | default('N/A') }}"
+
+    - name: List installed packages
+      package_facts:
+        manager: auto
+
+    - name: Show installed packages
+      debug:
+        var: ansible_facts.packages
